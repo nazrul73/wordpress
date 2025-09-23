@@ -12,6 +12,8 @@ services:
       MYSQL_PASSWORD: wordpresspassword
     volumes:
       - db_data:/var/lib/mysql
+    networks:
+      - wpnet
 
   wordpress:
     image: wordpress:php8.2-fpm
@@ -26,8 +28,16 @@ services:
       WORDPRESS_DB_PASSWORD: wordpresspassword
     volumes:
       - wordpress_data:/var/www/html
+    ports:
+      - "127.0.0.1:9000:9000"   # Expose PHP-FPM to host only
+    networks:
+      - wpnet
 
+networks:
+  wpnet:
+    driver: bridge
 
 volumes:
   db_data:
   wordpress_data:
+
